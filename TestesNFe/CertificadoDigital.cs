@@ -25,7 +25,7 @@ namespace TestesNFe
                     store.Certificates.Find(X509FindType.FindByTimeValid, DateTime.Now, true)
                         .Find(X509FindType.FindByKeyUsage, X509KeyUsageFlags.DigitalSignature, true);
                 
-                if ((string.IsNullOrEmpty(serieCertDig)))
+                if (string.IsNullOrWhiteSpace(serieCertDig))
                 {
                     certificatesSel = X509Certificate2UI.SelectFromCollection(certificates, "Certificados Digitais",
                         "Selecione o Certificado Digital para uso no aplicativo", X509SelectionFlag.SingleSelection);

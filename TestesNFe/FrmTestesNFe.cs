@@ -39,8 +39,17 @@ namespace TestesNFe
             btnConsultar.Enabled = false;
             if (_x509Certificate2 == null)
             {
-                CertificadoDigital certificadoDigital = new CertificadoDigital();
-                _x509Certificate2 = certificadoDigital.SelecionarCertificado("");
+                using (FrmCertificadoDigitalSelecao frm = new FrmCertificadoDigitalSelecao())
+                {
+                    frm.ShowDialog();
+                    if (frm.DialogResult == DialogResult.OK)
+                        _x509Certificate2 = new CertificadoDigital().SelecionarCertificado(frm.mSerialNumber);
+                    else
+                    {
+                        btnConsultar.Enabled = true;
+                        return;
+                    }    
+                }
             }
 
             EnvConsGTIN envConsGTIN = new EnvConsGTIN();
