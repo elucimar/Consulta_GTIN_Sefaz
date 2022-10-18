@@ -55,7 +55,5 @@ namespace TestesNFe
 
             return certificate;
         }
-
     }
-
 }
