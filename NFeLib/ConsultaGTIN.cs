@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace NFeLib
@@ -16,7 +12,7 @@ namespace NFeLib
 
     public class NFeDadosMsg
     {
-        [XmlElement(ElementName = "consGTIN",Namespace = "http://www.portalfiscal.inf.br/nfe")]
+        [XmlElement(ElementName = "consGTIN", Namespace = "http://www.portalfiscal.inf.br/nfe")]
         public ConsultaGTIN ConsultaGTIN { get; set; }
 
     }
@@ -30,8 +26,7 @@ namespace NFeLib
         public string GTIN { get; set; }
 
         public ConsultaGTIN()
-        {
-        }
+        { }
 
         public ConsultaGTIN(string gtin)
         {
@@ -43,6 +38,9 @@ namespace NFeLib
     [XmlRoot(ElementName = "retConsGTIN", Namespace = "http://www.portalfiscal.inf.br/nfe")]
     public class RetConsGTIN
     {
+        [XmlAttribute(AttributeName = "versao")]
+        public string Versao { get; set; }
+
         [XmlElement(ElementName = "verAplic")]
         public string VerAplic { get; set; }
 
@@ -64,9 +62,7 @@ namespace NFeLib
         public string XProd { get; set; }
 
         public string NCM { get; set; }
-        
-        [XmlAttribute(AttributeName = "versao")]
-        public string Versao { get; set; }
-    }
 
+        public string CEST { get; set; }
+    }
 }

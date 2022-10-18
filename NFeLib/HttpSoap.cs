@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -32,7 +30,7 @@ namespace NFeLib
 
         public async Task<RetConsGTIN> ConsultaGTIN(XmlDocument xmlDoc)
         {
-            return await Enviar<RetConsGTIN>(xmlDoc,nomeClasseRetorno: "retConsGTIN");
+            return await Enviar<RetConsGTIN>(xmlDoc, nomeClasseRetorno: "retConsGTIN");
         }
 
         private async Task<T> Enviar<T>(XmlDocument xmlDoc, bool deserializar = true, bool criarSoap = true, string nomeClasseRetorno = "") where T : class, new()
@@ -42,15 +40,11 @@ namespace NFeLib
 
             XmlDocument xmlRetorno = await Enviar(xmlSoapEnvio);
             if (xmlRetorno == null)
-            {
                 return null;
-            }
 
             XmlDocument xmlSerializar = ExtractNodesXmlSoap(xmlRetorno, (nomeClasseRetorno.Length > 0 ? nomeClasseRetorno : new T().GetType().Name));
             if (xmlSerializar == null)
-            {
                 return null;
-            }
 
             XmlRetornoSefaz = xmlSerializar;
             return deserializar
@@ -67,7 +61,7 @@ namespace NFeLib
             HttpResponseMessage response = null;
             HttpClient client = null;
 
-            if(_certificadoDigital == null)
+            if (_certificadoDigital == null)
             {
                 GetErros = "Certificado digital inválido!";
                 return null;
@@ -76,9 +70,7 @@ namespace NFeLib
             try
             {
                 foreach (var clientCertificate in handler.ClientCertificates)
-                {
                     handler.ClientCertificates.Remove(clientCertificate);
-                }
 
                 handler.ClientCertificates.Add(_certificadoDigital);
                 handler.ServerCertificateCustomValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
@@ -139,9 +131,7 @@ namespace NFeLib
             try
             {
                 if (xmlDoc.FirstChild is XmlDeclaration)
-                {
                     xmlDoc.RemoveChild(xmlDoc.FirstChild);
-                }
 
                 string nsRoot = "http://www.w3.org/2003/05/soap-envelope";
                 XmlDocument xmlSoap = new XmlDocument();
@@ -154,7 +144,6 @@ namespace NFeLib
 
                 xmlSoap.AppendChild(envelope);
                 return xmlSoap;
-
             }
 
             catch (Exception ex)
@@ -175,5 +164,4 @@ namespace NFeLib
             return nome.Value;
         }
     }
-
 }

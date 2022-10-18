@@ -1,19 +1,10 @@
 ﻿using NFeLib;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Threading.Tasks;
-using System.Web.Services.Description;
 using System.Windows.Forms;
 using System.Xml;
-using System.Xml.Serialization;
 
 namespace TestesNFe
 {
@@ -25,14 +16,40 @@ namespace TestesNFe
             InitializeComponent();
         }
 
+        private void FrmTestesNFe_Load(object sender, EventArgs e)
+        {
+            gridRetorno.AutoGenerateColumns = false;
+        }
+
+        private void txtCodigoBarra_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsNumber(e.KeyChar) && e.KeyChar != Convert.ToChar(8))
+                e.Handled = true;
+        }
+
         private async void BtnConsultar_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(txtCodigoBarra.Text))
+            {
+                MessageBox.Show("Digitar um Código de Barras", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                txtCodigoBarra.Focus();
+                return;
+            }
 
             btnConsultar.Enabled = false;
             if (_x509Certificate2 == null)
             {
-                CertificadoDigital certificadoDigital = new CertificadoDigital();
-                _x509Certificate2 = certificadoDigital.SelecionarCertificado("");
+                using (FrmCertificadoDigitalSelecao frm = new FrmCertificadoDigitalSelecao())
+                {
+                    frm.ShowDialog();
+                    if (frm.DialogResult == DialogResult.OK)
+                        _x509Certificate2 = new CertificadoDigital().SelecionarCertificado(frm.mSerialNumber);
+                    else
+                    {
+                        btnConsultar.Enabled = true;
+                        return;
+                    }    
+                }
             }
 
             EnvConsGTIN envConsGTIN = new EnvConsGTIN();
@@ -50,7 +67,5 @@ namespace TestesNFe
                 return;
             }
         }
-
-        
     }
 }
